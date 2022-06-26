@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="120dp">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/likeMarketImageView"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:padding="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/ic_launcher_background" />
+
+    <ImageView
+        android:id="@+id/likeMarketDeleteButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:src="@drawable/ic_baseline_clear_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/likeMarketNameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@id/likeMarketImageView"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="market title" />
+
+    <TextView
+        android:id="@+id/likeMarketDistanceTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        app:layout_constraintStart_toEndOf="@id/likeMarketImageView"
+        app:layout_constraintTop_toBottomOf="@id/likeMarketNameTextView"
+        tools:text="2.0km" />
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/likeMarketStateChip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/market_closed"
+        app:chipBackgroundColor="@color/ambient_red"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/likeMarketImageView" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.YUmarket">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+
+    <application
+        android:name=".MyApplication"
+        android:allowBackup="false"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.MyApplication23"
+        android:largeHeap="true"
+        android:usesCleartextTraffic="true">
+        <activity
+            android:name=".screen.home.homedetail.HomeMarketDetailActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".screen.SplahActivity"
+            android:exported="true"
+            android:theme="@style/Splash">
+        </activity>
+        <activity
+            android:name=".screen.MainActivity"
+            android:configChanges="uiMode"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.SENDTO" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity android:name=".screen.myinfo.MyInfoActivity" />
+        <activity android:name=".screen.home.suggest.HomeSuggestActivity" />
+        <activity android:name=".screen.login.SignUpActivity"/>
+        <activity
+            android:name=".screen.map.MapProductInfo.MapProductInfoActivity"
+            android:exported="true" />
+        <activity android:name=".screen.login.LoginActivity"
+            android:exported="true">
+        </activity>
+        <activity
+            android:name=".screen.myLocation.SearchAddressActivity"
+            android:exported="true" />
+        <activity android:name=".screen.map.MapLocationSetting.MapLocationSettingActivity" />
+        <activity android:name=".screen.myLocation.MyLocationActivity" />
+        <activity android:name=".screen.chat.ChatActivity"/>
+
+        <meta-data
+            android:name="com.naver.maps.map.CLIENT_ID"
+            android:value="ktudrgdtrw"/>
+    </application>
+
+</manifest>

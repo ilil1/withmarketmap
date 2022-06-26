@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <array name="advertisement">
+    <item>@drawable/ic_launcher_foreground</item>
+        <item>@drawable/ic_launcher_foreground</item>
+        <item>@drawable/ic_launcher_foreground</item>
+        <item>@drawable/ic_launcher_foreground</item>
+        <item>@drawable/ic_launcher_foreground</item>
+    </array>
+
+
+    <string-array name="spinner">
+        <item>선택안함</item>
+        <item>교육</item>
+        <item>취미</item>
+        <item>생활</item>
+        <item>운동</item>
+    </string-array>
+    
+    
+    
+    
+</resources>

@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:background="@color/base"
+            android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/searchView"
+            android:layout_width="match_parent"
+            android:layout_marginBottom="15dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/radius"
+            app:iconifiedByDefault="false"
+            app:queryHint="검색어를 입력해주세요" />
+
+        </LinearLayout>
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/pager"
+            android:fitsSystemWindows="true"
+            android:layout_width="match_parent"
+            android:layout_height="200dp" />
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/hobby"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="20dp">
+
+            <TextView
+                android:id="@+id/season"
+                android:layout_width="164sp"
+                android:layout_height="wrap_content"
+                android:text="@string/spring"
+                android:textSize="18sp"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!--            <TextView-->
+            <!--                android:id="@+id/showMoreSeason"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:text="더보기"-->
+            <!--                android:textSize="14sp"-->
+            <!--                app:layout_constraintBottom_toBottomOf="@id/season"-->
+            <!--                app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                app:layout_constraintTop_toTopOf="@id/season" />-->
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/showMoreSeason"
+                android:layout_width="60dp"
+                android:layout_height="40dp"
+                android:background="@drawable/radius_myinfo"
+                android:text="더보기"
+                android:textSize="12sp"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="@id/season"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/season" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/season_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintTop_toBottomOf="@id/season" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="20dp">
+
+            <TextView
+                android:id="@+id/popular"
+                android:layout_width="164dp"
+                android:layout_height="wrap_content"
+                android:bufferType="spannable"
+                android:text="@string/hobby_string"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/showMorehobby"
+                android:layout_width="60dp"
+                android:layout_height="40dp"
+                android:background="@drawable/radius_myinfo"
+                android:text="더보기"
+                android:textSize="12sp"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="@id/popular"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/popular" />
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/popular_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintTop_toBottomOf="@id/popular" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="20dp">
+
+            <TextView
+                android:id="@+id/nearbyMarketTextView"
+                android:layout_width="145dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:text="@string/nearly"
+                android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/showMoreTextView"
+                android:layout_width="60dp"
+                android:layout_height="40dp"
+                android:background="@drawable/radius_myinfo"
+                android:text="더보기"
+                android:textSize="12sp"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="@id/nearbyMarketTextView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/nearbyMarketTextView" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/nearbyMarketRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:nestedScrollingEnabled="false"
+                app:layout_constraintTop_toBottomOf="@id/nearbyMarketTextView" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="20dp">
+
+            <TextView
+                android:id="@+id/annival"
+                android:layout_width="145dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:text="@string/annival"
+                android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/showMoreAnnival"
+                android:layout_width="60dp"
+                android:layout_height="40dp"
+                android:background="@drawable/radius_myinfo"
+                android:text="더보기"
+                android:textSize="12sp"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="@id/annival"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/annival" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/annivalRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:nestedScrollingEnabled="false"
+                app:layout_constraintTop_toBottomOf="@id/annival" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:cardUseCompatPadding="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/itemImageView"
+            android:layout_width="150dp"
+            android:layout_height="120dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/itemInformationContainer"
+            android:layout_width="0dp"
+            android:layout_height="25dp"
+            android:background="@drawable/home_item_image_information_background"
+            app:layout_constraintBottom_toBottomOf="@id/itemImageView"
+            app:layout_constraintEnd_toEndOf="@id/itemImageView"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/itemDistanceTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginStart="18dp"
+            android:gravity="end|center_vertical"
+            android:padding="2dp"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/itemInformationContainer"
+            tools:text="1.0" />
+
+        <!-- 거리의 단위를 표기하는 텍스트뷰 -->
+        <TextView
+            android:id="@+id/distanceUnitTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginStart="2dp"
+            android:gravity="end|center_vertical"
+            android:padding="2dp"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            app:layout_constraintStart_toEndOf="@id/itemDistanceTextView"
+            app:layout_constraintTop_toTopOf="@id/itemInformationContainer"
+            tools:text="km" />
+
+        <View
+            android:id="@+id/distinguishLineView"
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@color/white"
+            app:layout_constraintBottom_toBottomOf="@id/itemInformationContainer"
+            app:layout_constraintStart_toEndOf="@id/itemReviewCountTextView"
+            app:layout_constraintTop_toTopOf="@id/itemInformationContainer" />
+
+        <TextView
+            android:id="@+id/marketNameOfItemTextView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="12dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="2"
+            android:padding="2dp"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/itemInformationContainer"
+            app:layout_constraintEnd_toEndOf="@id/itemInformationContainer"
+            app:layout_constraintStart_toEndOf="@id/distinguishLineView"
+            app:layout_constraintTop_toTopOf="@id/itemInformationContainer"
+            tools:text="빅마트 영남대점 빅마트 영남대점 빅마트 영남대점 빅마트 영남대점 " />
+
+        <!-- 아이템의 리뷰 카운트에 대한 텍스트뷰 -->
+        <TextView
+            android:id="@+id/itemReviewCountTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginEnd="20dp"
+            android:gravity="end|center_vertical"
+            android:padding="2dp"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/itemReviewTextView"
+            app:layout_constraintTop_toBottomOf="@id/itemDistanceTextView"
+            tools:text="0" />
+
+
+        <!-- 아이템의 리뷰에 대한 텍스트뷰 -->
+        <TextView
+            android:id="@+id/itemReviewTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginEnd="3dp"
+            android:gravity="end|center_vertical"
+            android:padding="2dp"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/itemLikeCountTextView"
+            app:layout_constraintTop_toBottomOf="@id/itemDistanceTextView"
+            tools:text="리뷰" />
+
+        <!-- 아이템의 찜 카운트에 대한 텍스트뷰 -->
+        <TextView
+            android:id="@+id/itemLikeCountTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginEnd="10dp"
+            android:gravity="end|center_vertical"
+            android:padding="2dp"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/itemLikeTextView"
+            app:layout_constraintTop_toBottomOf="@id/itemDistanceTextView"
+            tools:text="0" />
+
+        <!-- 아이템의 찜에 대한 텍스트뷰 -->
+        <TextView
+            android:id="@+id/itemLikeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginEnd="3dp"
+            android:gravity="end|center_vertical"
+            android:padding="2dp"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@id/itemDistanceTextView"
+            app:layout_constraintTop_toBottomOf="@id/itemDistanceTextView"
+            tools:text="찜" />
+
+        <TextView
+            android:id="@+id/itemNameTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/itemInformationContainer"
+            tools:text="초코송이" />
+
+        <TextView
+            android:id="@+id/originPriceTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:textColor="@color/gray_64"
+            android:textSize="10sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/itemNameTextView"
+            tools:text="1500원" />
+
+        <TextView
+            android:id="@+id/disCountPercentTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="8dp"
+            android:textColor="@color/ambient_red"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/originPriceTextView"
+            tools:text="46%" />
+
+        <TextView
+            android:id="@+id/salePriceTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="8dp"
+            android:textColor="@color/black"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/disCountPercentTextView"
+            app:layout_constraintTop_toBottomOf="@id/originPriceTextView"
+            tools:text="800원" />
+
+        <TextView
+            android:id="@+id/itemStockTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/home_item_stock"
+            android:textColor="@color/black"
+            android:textSize="10sp"
+
+            app:layout_constraintStart_toEndOf="@+id/salePriceTextView"
+            app:layout_constraintTop_toTopOf="@id/salePriceTextView" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/itemStockTextView" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>
