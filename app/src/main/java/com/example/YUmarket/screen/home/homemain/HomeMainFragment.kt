@@ -45,7 +45,6 @@ class HomeMainFragment
     : BaseFragment<FragmentHomeMainBinding>(),
     AdapterView.OnItemSelectedListener {
 
-
     private lateinit var viewPager2: ViewPager2
     private val sliderHandler = Handler()
 

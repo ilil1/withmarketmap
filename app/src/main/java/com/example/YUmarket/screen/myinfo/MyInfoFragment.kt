@@ -155,7 +155,6 @@ class MyInfoFragment : BaseFragment<FragmentMyInfoBinding>() {
                         My_ID = jsonObject.getString("heetae") as String
                     }catch (e: JSONException){}
 
-
                     sharedManager.setImgString(requireContext(),My_ID,ConvertBitmap.BitmapToString(bitmap)
                         ,My_ID+"_jpg")
 
@@ -164,7 +163,6 @@ class MyInfoFragment : BaseFragment<FragmentMyInfoBinding>() {
                 }
             }
         }
-
     }
 
     private fun loadImage() {

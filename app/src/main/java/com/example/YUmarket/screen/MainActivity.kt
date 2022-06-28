@@ -33,6 +33,7 @@ import com.example.YUmarket.data.entity.location.MapSearchInfoEntity
 import com.example.YUmarket.databinding.ActivityMainBinding
 import com.example.YUmarket.screen.base.BaseActivity
 import com.example.YUmarket.screen.map.MapLocationSetting.MapLocationSettingActivity
+import com.example.YUmarket.screen.map.MapViewModel
 import com.example.YUmarket.screen.myLocation.MyLocationActivity
 import com.example.YUmarket.util.PreferenceManager
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
@@ -50,13 +51,7 @@ class MainActivity
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.ACCESS_COARSE_LOCATION
         )
-
     }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
 
     // Navigation에 사용할 Controller
     private val navController by lazy {
@@ -114,7 +109,6 @@ class MainActivity
 
     private val viewModel by viewModel<MainViewModel>()
 
-
     override fun getViewBinding(): ActivityMainBinding = ActivityMainBinding.inflate(layoutInflater)
 
     override fun observeData() = with(binding) {
@@ -143,14 +137,10 @@ class MainActivity
 
     override fun initViews() = with(binding) {
         val url = "http://54.180.202.117/search.php"
-        // 22.01.19 BottomNavigationView의 동작을 Controller를 이용하여 설정
-        // by 정남진
+
         bottomNav.setupWithNavController(navController)
 
-
-
         wView.settings.apply {
-
             javaScriptEnabled = true
             javaScriptCanOpenWindowsAutomatically = true
             setSupportMultipleWindows(true)
@@ -163,9 +153,7 @@ class MainActivity
             loadUrl(url)
         }
 
-
         //wView.loadUrl("https://www.naver.com")
-
 //        locationTitleTextView.setOnClickListener {
 //            //  Sliding()
 //        }
@@ -193,7 +181,6 @@ class MainActivity
 //        }
 
     override fun onBackPressed() {
-
 
         if (doubleBackToExit) {
             finishAffinity()
@@ -273,29 +260,14 @@ class MainActivity
 
     inner class MyLocationListener : LocationListener {
         override fun onLocationChanged(location: Location) {
-            curLoc = location
-            viewModel.setCurrentLocation(curLoc)
-//            binding.locationTitleTextView.text = "${location.latitude}, ${location.longitude}"
             viewModel.getReverseGeoInformation(
                 LocationLatLngEntity(
                     latitude = location.latitude,
                     longitude = location.longitude
                 )
             )
-            val lat = curLoc.latitude
-            val lon = curLoc.longitude
-
-            var save_form =
-                "{\"LATITUDE\":\"$lat\",\"LONGITUDE\":\"$lon\"}"
-
-            PreferenceManager.setTempUserString(application, "LOCATION", save_form)
-            PreferenceManager.setUserString(
-                application,
-                "LOCATION",
-                save_form,
-                "locationData"
-            )
-
+            curLoc = location
+            viewModel.setCurrentLocation(curLoc)
             removeLocationListener()
         }
 

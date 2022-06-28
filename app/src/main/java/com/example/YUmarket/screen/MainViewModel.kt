@@ -2,8 +2,6 @@ package com.example.YUmarket.screen
 
 import android.graphics.Color
 import android.location.Location
-import android.util.Log
-import androidx.lifecycle.*
 import com.example.YUmarket.util.provider.ResourcesProvider
 import com.example.YUmarket.R
 import com.example.YUmarket.data.entity.location.LocationLatLngEntity
@@ -16,12 +14,11 @@ import androidx.lifecycle.viewModelScope
 import com.example.YUmarket.data.entity.shop.ShopInfoEntity
 import com.example.YUmarket.data.repository.map.MapApiRepository
 import com.example.YUmarket.data.repository.shop.ShopApiRepository
-import com.example.YUmarket.data.response.shop.ShopData
-import com.example.YUmarket.screen.home.homemain.HomeMainState
 import com.example.YUmarket.screen.map.MapState
 import com.example.YUmarket.screen.map.ShopApiState
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraPosition
+import com.naver.maps.map.LocationTrackingMode
 import com.naver.maps.map.NaverMap
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.util.MarkerIcons
@@ -38,7 +35,7 @@ class MainViewModel(
 
     var shopList: MutableList<ShopInfoEntity> = mutableListOf()
 
-    private var map: NaverMap? = null
+    private var naverMap: NaverMap? = null
 
     private val _locationData = MutableLiveData<MainState>(MainState.Uninitialized)
     val locationData: LiveData<MainState> = _locationData
@@ -46,8 +43,9 @@ class MainViewModel(
     private val _shopData = MutableLiveData<ShopApiState>(ShopApiState.Uninitialized)
     val shopData: LiveData<ShopApiState> = _shopData
 
-    lateinit var destLocation: LocationLatLngEntity
+    private lateinit var destLocation: LocationLatLngEntity
     lateinit var curLocation: Location
+
     private var markers = mutableListOf<Marker>()
 
     private var destMarker: Marker = Marker(
@@ -72,7 +70,7 @@ class MainViewModel(
         curLocation = loc
     }
 
-    fun getCurrentLocation(): Location {
+    fun getCurrentLocation() : Location {
         return curLocation
     }
 
@@ -100,11 +98,11 @@ class MainViewModel(
     }
 
     fun getMap(): NaverMap? {
-        return map
+        return naverMap
     }
 
     fun setMap(m: NaverMap) {
-        map = m
+        naverMap = m
     }
 
     fun setMarkers(list: List<Marker>) {
@@ -127,8 +125,7 @@ class MainViewModel(
         return null
     }
 
-    fun getShopEntityList(): List<ShopInfoEntity>?
-    {
+    fun getShopEntityList(): List<ShopInfoEntity>? {
         when (shopData.value) {
             is ShopApiState.Success -> {
                 return (shopData.value as ShopApiState.Success).shopInfoList
@@ -194,28 +191,23 @@ class MainViewModel(
     }
 
     private fun deleteMarkers() {
-
         if (markers.isNullOrEmpty())
             return
-
         for (marker in markers!!) {
             marker.map = null
         }
     }
 
-    public fun updateLocation(location: LocationLatLngEntity) {
+    fun updateLocation(location: LocationLatLngEntity) {
         // 위치 업데이트 될 때마다 목적지 마커 초기화
         destLocation = location
-
         deleteMarkers()
-
-        map?.cameraPosition = CameraPosition(
+        naverMap?.cameraPosition = CameraPosition(
             LatLng(
                 destLocation.latitude,
                 destLocation.longitude
             ), 15.0
         )
-
-        destMarker.map = map
+        destMarker.map = naverMap
     }
 }
