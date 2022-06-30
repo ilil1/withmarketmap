@@ -8,8 +8,6 @@ import kotlinx.coroutines.launch
 
 abstract class BaseViewModel : ViewModel() {
 
-
     open fun fetchData(): Job = viewModelScope.launch {  }
-
 
 }

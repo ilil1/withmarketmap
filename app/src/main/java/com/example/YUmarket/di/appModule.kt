@@ -53,12 +53,13 @@ import org.koin.dsl.module
 
 val appModule = module {
 
-
     factory { (homeListCategory: HomeListCategory) ->
         HomeListViewModel(homeListCategory, get())
     }
+
     /*  CSViewModel 추가  의존성 주입   factory추가
     *   csCategory factory                     */
+
     factory { (csCategory: CSCategory) ->
         CSListViewModel(csCategory,get())
     }
@@ -72,6 +73,7 @@ val appModule = module {
     viewModel { (mapSearchInfoEntity: MapSearchInfoEntity) ->
         MyLocationViewModel(mapSearchInfoEntity, get())
     }
+
     viewModel(named(LikeCategory.MARKET)) {
         LikeListViewModel<LikeMarketModel>(
             get(
@@ -88,12 +90,11 @@ val appModule = module {
         )
     }
 
-    viewModel {HomeMainViewModel(get(),get())}
-    viewModel { MainViewModel(get(),get(),get(),get()) }
-    viewModel { MapViewModel() }
-    viewModel {ChatViewModel(get())}
+    viewModel { HomeMainViewModel(get(),get())}
+    viewModel { MainViewModel(get(),get()) }
+    viewModel { MapViewModel(get()) }
+    viewModel { ChatViewModel(get())}
     viewModel { StoreViewModel(get()) }
-
     viewModel { MapLocationSettingViewModel(get()) }
     viewModel { HomeMarketReviewViewModel(get()) }
 
@@ -102,6 +103,7 @@ val appModule = module {
     single<StoreRepository>{ DefaultStoreRepository() }
     single<HomeRepository> { DefaultHomeRepository() }
     single<SuggestRepository> {DefaultSuggestRepository()}
+
     // mockList 의존성 주입
     single<CSRepository>{ DefaultCSRepository(get()) }
     single<ResourcesProvider> { DefaultResourcesProvider(androidContext()) }
@@ -136,7 +138,4 @@ val appModule = module {
     single<LikeListRepository<LikeItemModel>>(named("likeItemRepository")) {
         DefaultLikeItemRepository(get(), get())
     }
-
-
-
 }

@@ -98,13 +98,14 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
 
     }
 
+    //private var map: NaverMap? = null
     private lateinit var naverMap: NaverMap
     private lateinit var layout: View
 
     private var filterCategoryOptions = mutableListOf<CheckBox>()
     private var filterCategoryChecked = mutableListOf<Boolean>()
 
-    //private var map: NaverMap? = null
+
 
     /**
      * 지도에서 사용할 목적지 마커
@@ -116,6 +117,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
     private var infoWindow: InfoWindow? = null
 
     private lateinit var locationManager: LocationManager
+
     private val locationListener: LocationListener by lazy {
         LocationListener { location ->
             activityViewModel.curLocation = location
@@ -134,7 +136,6 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
         }
     }
 
-    private var isFragmentInitialized: Boolean = false
     private var isListenerAdded : Boolean = false
 
     /*
@@ -150,6 +151,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
         FragmentMapBinding.inflate(layoutInflater)
 
     override fun observeData() = with(activityViewModel) {
+
         data.observe(viewLifecycleOwner) {
             when (it) {
                 is MapState.Uninitialized -> {}
@@ -172,41 +174,28 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
         // MainViewModel에서 value 수정할때마다 호출
         activityViewModel.locationData.observe(viewLifecycleOwner) {
             when (it) {
-                is MainState.Uninitialized -> {
-
-                }
-
-                is MainState.Loading -> {
-
-                }
-
+                is MainState.Uninitialized -> {}
+                is MainState.Loading -> {}
                 is MainState.Success -> {
                     //val destLoc = viewModel.getDestinationLocation()
                     //updateLocationOverlay(destLoc)
-                    updateLocation(it.mapSearchInfoEntity.locationLatLng)
+                    mapViewModel.updateLocation(it.mapSearchInfoEntity.locationLatLng)
                     removeAllMarkers()
                 }
-
-                is MainState.Error -> {
-
-                }
+                is MainState.Error -> {}
             }
         }
 
-        activityViewModel.shopData.observe(viewLifecycleOwner) {
+        mapViewModel.shopData.observe(viewLifecycleOwner) {
             when(it) {
                 is ShopApiState.Uninitialized -> {
-                    activityViewModel.getApiShopList()
+                    mapViewModel.getApiShopList()
                 }
-
                 is ShopApiState.Loading -> {
                 }
-
                 is ShopApiState.Success -> {
                 }
-
                 is ShopApiState.Error -> {
-
                 }
             }
         }
@@ -257,12 +246,12 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
     }
 
     private fun setMarkerListener(markets: List<ShopInfoEntity>) {
-        for (marker in activityViewModel.getMarkers()!!) {
-
+        for (marker in mapViewModel.getMarkers()!!) {
             marker.setOnClickListener {
                 // idx로는 setOnClickListener에서 마커의 index를 못찾아서 고유값인 zIndex로 대체
 
                 this@MapFragment.infoWindow?.close()
+
                 this@MapFragment.infoWindow = InfoWindow()
                 this@MapFragment.infoWindow?.adapter =
                     object : InfoWindow.DefaultTextAdapter(requireContext()) {
@@ -488,7 +477,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
     }
 
     private fun removeAllMarkers() {
-        activityViewModel.getMarkers()!!.forEach { marker ->
+        mapViewModel.getMarkers()!!.forEach { marker ->
             marker.map = null
         }
         binding.viewPager2.visibility = View.GONE
@@ -565,7 +554,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
 
         btnCurLocation.setOnClickListener {
             try {
-                activityViewModel.getMap()?.cameraPosition =
+                mapViewModel.getMap()?.cameraPosition =
                     CameraPosition(
                         LatLng(
                             activityViewModel.getCurrentLocation().latitude,
@@ -579,7 +568,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
 
         btnDestLocation.setOnClickListener {
             try {
-                activityViewModel.getMap()?.cameraPosition =
+                mapViewModel.getMap()?.cameraPosition =
                     CameraPosition(
                         LatLng(
                             activityViewModel.getDestinationLocation().latitude,
@@ -631,7 +620,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
         }
     }
 
-    private fun updateMarker(){
+    private fun updateMarker() {
         deleteMarkers()
 
         // 가게 돌면서 가게 id에 해당하는게 true라면
@@ -639,14 +628,15 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
         var i = 0
         var markets : List<ShopInfoEntity> = mutableListOf()
 
-        activityViewModel.shopData.observe(viewLifecycleOwner) {
+        // 고침
+        mapViewModel.shopData.observe(viewLifecycleOwner) {
             when(it) {
                 is ShopApiState.Uninitialized -> {
                 }
                 is ShopApiState.Loading -> {
                 }
                 is ShopApiState.Success -> {
-                    markets = activityViewModel.getShopEntityList()!!
+                    markets = mapViewModel.getShopEntityList()!!
                 }
                 is ShopApiState.Error -> {
 
@@ -698,7 +688,8 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
                 i++
             }
 
-            activityViewModel.setMarkers(temp)
+            //activityViewModel.setMarkers(temp)
+            mapViewModel.setMarkers(temp)
 
             searchAround()
 
@@ -724,7 +715,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
      * 네이버 지도상 마커를 모두 없애는 method
      */
     private fun deleteMarkers() {
-        for (marker in activityViewModel.getMarkers()!!) {
+        for (marker in mapViewModel.getMarkers()!!) {
             marker.map = null
         }
     }
@@ -734,10 +725,10 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
      */
     private fun showMarkersOnMap() {
         var i = 0
-        for (marker in activityViewModel.getMarkers()!!) {
-            marker.map = activityViewModel.getMap()
+        for (marker in mapViewModel.getMarkers()!!) {
+            marker.map = mapViewModel.getMap()
 
-            setMarkerIconAndColor(marker, getCategoryNum(activityViewModel.getShopEntityList()?.get(marker.zIndex)!!.category))
+            setMarkerIconAndColor(marker, getCategoryNum(mapViewModel.getShopEntityList()?.get(marker.zIndex)!!.category))
         }
     }
 
@@ -747,7 +738,6 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
         try {
             val destLocation = activityViewModel.getDestinationLocation()
             mapViewModel.setDestinationLocation(destLocation)
-            isFragmentInitialized = true
         } catch (ex: Exception) {
             Toast.makeText(context, "destLocation 가져오는 중", Toast.LENGTH_SHORT).show()
         }
@@ -775,8 +765,6 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
 
     override fun onMapReady(map: NaverMap) {
 
-        //naverMap.locationSource = locationSource
-
         naverMap = map.apply {
             locationSource = locationSource1 //현재 위치값을 넘긴다
             locationTrackingMode = LocationTrackingMode.NoFollow
@@ -786,7 +774,6 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
         }
 
         mapViewModel.setMap(naverMap)
-        activityViewModel.setMap(naverMap)
 
         /* TODO
             geocoder.getFromLocationName()
