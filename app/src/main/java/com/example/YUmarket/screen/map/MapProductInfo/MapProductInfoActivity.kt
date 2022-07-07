@@ -11,7 +11,7 @@ import kotlin.math.roundToInt
 
 class MapProductInfoActivity : BaseActivity<ActivityMapProductInfoBinding>() {
 
-    override fun initViews(){
+    override fun initViews() {
         val item = intent.extras?.getParcelable<MapItemModel>(MAP_ITEM_MODEL_KEY)
 
         with(binding){

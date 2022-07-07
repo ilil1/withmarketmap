@@ -22,15 +22,16 @@ class MainViewModel(
     private val _locationData = MutableLiveData<MainState>(MainState.Uninitialized)
     val locationData: LiveData<MainState> = _locationData
 
-    private val _data = MutableLiveData<MapState>(MapState.Uninitialized)
-    val data: LiveData<MapState> = _data
-
     private lateinit var destLocation: LocationLatLngEntity
+
     lateinit var curLocation: Location
 
     fun setCurrentLocation(loc: Location) { curLocation = loc }
+
     fun getCurrentLocation() : Location { return curLocation }
+
     fun setDestinationLocation(loc: LocationLatLngEntity) { destLocation = loc }
+
     fun getDestinationLocation(): LocationLatLngEntity { return destLocation }
 
     @Suppress("CAST_NEVER_SUCCEEDS")
@@ -48,7 +49,6 @@ class MainViewModel(
     ) = viewModelScope.launch {
 
         val currentLocation = locationLatLngEntity
-
         val addressInfo = mapApiRepository.getReverseGeoInformation(locationLatLngEntity)
 
         addressInfo?.let { addressInfoResult ->

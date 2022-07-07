@@ -26,7 +26,7 @@
             android:text="주소지" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_filter"
+            android:id="@+id/btnFilter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="필터" />
@@ -74,7 +74,6 @@
         android:background="@color/white"
         android:layout_height="150dp"
         android:visibility="gone"
-
         app:layout_constraintBottom_toBottomOf="parent"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

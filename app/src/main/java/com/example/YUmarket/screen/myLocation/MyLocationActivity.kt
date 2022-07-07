@@ -9,8 +9,6 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
-import aop.fastcampus.part6.chapter01.screen.mylocation.MyLocationState
-import aop.fastcampus.part6.chapter01.screen.mylocation.MyLocationViewModel
 import com.example.YUmarket.data.db.dao.AddressHistoryDao
 import com.example.YUmarket.data.entity.location.LocationLatLngEntity
 import com.example.YUmarket.data.entity.location.MapSearchInfoEntity
@@ -30,6 +28,7 @@ import java.net.URLEncoder
 
 class MyLocationActivity :
     BaseActivity<ActivityMyLocationBinding>() {
+
     lateinit var recentAddrAdapter: RecentAddrAdapter
 
     private val GEOCODE_URL = "http://dapi.kakao.com/v2/local/search/address.json?query="
@@ -45,9 +44,8 @@ class MyLocationActivity :
 
     override fun getViewBinding() = ActivityMyLocationBinding.inflate(layoutInflater)
 
-
     companion object {
-
+        //mainAcivity의 context를 가지고 새로운 인스턴스가 만들어진다.
         fun newIntent(context: Context, mapSearchInfoEntity: MapSearchInfoEntity) =
             Intent(context, MyLocationActivity::class.java).apply {
                 putExtra(MY_LOCATION_KEY, mapSearchInfoEntity)
@@ -55,12 +53,14 @@ class MyLocationActivity :
     }
 
     private val startSearchActivityForResult =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                val bundle = result.data?.extras
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                result: ActivityResult ->
 
+            if (result.resultCode == Activity.RESULT_OK) {
+
+                val bundle = result.data?.extras
                 val str = bundle?.get(MY_LOCATION_KEY).toString()
-//
+
 //                Toast.makeText(
 //                    this,
 //                    "=> " + bundle?.get(MY_LOCATION_KEY).toString(),
@@ -68,6 +68,7 @@ class MyLocationActivity :
 //                ).show()
 
                 Thread {
+
                     val obj: URL
                     //try {
                     val address: String = URLEncoder.encode(str, "UTF-8")
@@ -97,7 +98,7 @@ class MyLocationActivity :
                     )
 
                     intent?.putExtra(MY_LOCATION_KEY, result)
-                    setResult(Activity.RESULT_OK, intent);
+                    setResult(Activity.RESULT_OK, intent)
 
                     Handler(Looper.getMainLooper()).postDelayed({
                         saveRecentSearchItems(result)
@@ -142,18 +143,17 @@ class MyLocationActivity :
     }
 
     private val startForResult =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult())
+        { result: ActivityResult ->
             if (result.resultCode == Activity.RESULT_OK) {
 
                 val bundle = result.data?.extras
                 val result = bundle?.get("result")
 
                 intent?.putExtra(MY_LOCATION_KEY, result as MapSearchInfoEntity)
-                setResult(Activity.RESULT_OK, intent);
-
+                setResult(Activity.RESULT_OK, intent)
                 saveRecentSearchItems(result as MapSearchInfoEntity)
-
-                finish()
+                finish()//반환시에 MyLocationActivity finish()
             }
         }
 
@@ -166,15 +166,16 @@ class MyLocationActivity :
         )
     }
 
-
     override fun initViews() = with(binding) {
-/*         toolbar.setNavigationOnClickListener {
+        /*
+         toolbar.setNavigationOnClickListener {
              onBackPressed()
          }
          confirmButton.setOnClickListener {
              viewModel.confirmSelectLocation()
          }*/
 
+        //이거 이해중
         btnSetLocation.setOnClickListener {
             openActivityForResult()
         }
@@ -190,7 +191,6 @@ class MyLocationActivity :
         btnClear.setOnClickListener {
             runBlocking {
                 addressHistoryDao.deleteAllAddresses()
-
                 Toast.makeText(applicationContext, "전체 삭제 완료", Toast.LENGTH_LONG).show()
                 recentAddrAdapter.clear()
                 recentAddrAdapter.notifyDataSetChanged()
@@ -201,9 +201,9 @@ class MyLocationActivity :
             //Toast.makeText(applicationContext, item, Toast.LENGTH_LONG).show()
             intent?.putExtra(MY_LOCATION_KEY, MapSearchInfoEntity(item.name, item.name, LocationLatLngEntity(item.lat, item.lng)))
             setResult(Activity.RESULT_OK, intent);
-
             finish()
         }
+
         binding.rvRecentAddr.layoutManager = LinearLayoutManager(this@MyLocationActivity, LinearLayoutManager.VERTICAL, false)
         binding.rvRecentAddr.adapter = recentAddrAdapter
 
@@ -213,7 +213,6 @@ class MyLocationActivity :
             }
         }
     }
-
 
     override fun observeData() {
         viewModel.myLocationStateLiveData.observe(this) {

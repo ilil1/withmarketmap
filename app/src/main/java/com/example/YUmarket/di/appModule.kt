@@ -1,6 +1,6 @@
 package com.example.YUmarket.di
 
-import aop.fastcampus.part6.chapter01.screen.mylocation.MyLocationViewModel
+import com.example.YUmarket.screen.myLocation.MyLocationViewModel
 import com.example.YUmarket.data.entity.home.TownMarketEntity
 import com.example.YUmarket.data.entity.location.MapSearchInfoEntity
 import com.example.YUmarket.data.repository.basket.BasketRepository

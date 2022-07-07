@@ -7,8 +7,6 @@ plugins {
     //navigation
     id 'androidx.navigation.safeargs.kotlin'
     id 'com.google.gms.google-services'
-
-
 }
 
 android {
@@ -21,9 +19,7 @@ android {
         versionCode 1
 
         versionName "2.3.0"
-
         versionName "1.0"
-
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -45,12 +41,11 @@ android {
         enabled = true
     }
 
-
-
     compileSdkVersion 32
 }
 
 dependencies {
+
     implementation 'com.sothree.slidinguppanel:library:3.4.0'
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.0'
@@ -67,7 +62,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     implementation 'com.firebaseui:firebase-ui-auth:3.2.2'
     implementation 'com.google.firebase:firebase-core:16.0.0'
-
 
     //String too large
     implementation 'com.stripe:stripe-android:8.1.0'

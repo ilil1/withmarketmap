@@ -17,6 +17,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.Message
+import android.util.Log
 import android.view.View
 import android.webkit.*
 import android.widget.Toast
@@ -42,7 +43,6 @@ import org.koin.android.viewmodel.ext.android.viewModel
 class MainActivity
     : BaseActivity<ActivityMainBinding>() {
 
-    private lateinit var curLoc: Location
     private val handler = Handler()
     private var doubleBackToExit = false
 
@@ -53,7 +53,6 @@ class MainActivity
         )
     }
 
-    // Navigation에 사용할 Controller
     private val navController by lazy {
         val hostContainer =
             supportFragmentManager
@@ -68,40 +67,11 @@ class MainActivity
             val responsePermissions = permissions.entries.filter {
                 it.key in locationPermissions
             }
-
             if (responsePermissions.filter { it.value == true }.size == locationPermissions.size) {
                 setLocationListener()
             } else {
                 Toast.makeText(this, "no", Toast.LENGTH_SHORT).show()
             }
-        }
-
-    @SuppressLint("MissingPermission")
-    private fun checkLocation(): Boolean {
-        val location: Location?
-        if (ActivityCompat.checkSelfPermission(
-                applicationContext,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                applicationContext,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
-            binding.locationTitleTextView.text = location?.toString()
-            return true
-        }
-        return false
-    }
-
-    private val changeLocationLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { results ->
-            results.data?.getParcelableExtra<MapSearchInfoEntity>(MapLocationSettingActivity.MY_LOCATION_KEY)
-                ?.let { myLocationInfo ->
-                    viewModel.getReverseGeoInformation(myLocationInfo.locationLatLng)
-                    viewModel.setDestinationLocation(myLocationInfo.locationLatLng)
-                    Toast.makeText(this, curLoc?.toString(), Toast.LENGTH_SHORT).show()
-                }
         }
 
     private lateinit var locationManager: LocationManager
@@ -112,15 +82,14 @@ class MainActivity
     override fun getViewBinding(): ActivityMainBinding = ActivityMainBinding.inflate(layoutInflater)
 
     override fun observeData() = with(binding) {
+
         viewModel.locationData.observe(this@MainActivity) {
             when (it) {
                 is MainState.Uninitialized -> {
                     getMyLocation()
                 }
 
-                is MainState.Loading -> {
-
-                }
+                is MainState.Loading -> {}
 
                 is MainState.Success -> {
                     locationLoading.isGone = true
@@ -135,7 +104,19 @@ class MainActivity
         }
     }
 
+    private val changeLocationLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult())
+        { results ->
+            results.data?.getParcelableExtra<MapSearchInfoEntity>(
+                MapLocationSettingActivity.MY_LOCATION_KEY)
+                ?.let { mapSearchInfoEntity ->
+                    viewModel.getReverseGeoInformation(mapSearchInfoEntity.locationLatLng)
+                    viewModel.setDestinationLocation(mapSearchInfoEntity.locationLatLng)
+                }
+        }
+
     override fun initViews() = with(binding) {
+
         val url = "http://54.180.202.117/search.php"
 
         bottomNav.setupWithNavController(navController)
@@ -144,8 +125,8 @@ class MainActivity
             javaScriptEnabled = true
             javaScriptCanOpenWindowsAutomatically = true
             setSupportMultipleWindows(true)
-
         }
+
         wView.apply {
             webViewClient = client
             addJavascriptInterface(AndroidBridge(), "TestApp")
@@ -153,32 +134,21 @@ class MainActivity
             loadUrl(url)
         }
 
+        locationTitleTextView.setOnClickListener {
+            viewModel.getMapSearchInfo()?.let { mapSearchInfoEntity ->
+                changeLocationLauncher.launch(
+                    MyLocationActivity.newIntent(this@MainActivity, mapSearchInfoEntity)
+                )
+                Log.d("MyLocationActivity", "MyLocationActivity start")
+            }
+        }
+
         //wView.loadUrl("https://www.naver.com")
 //        locationTitleTextView.setOnClickListener {
 //            //  Sliding()
 //        }
-        locationTitleTextView.setOnClickListener {
-            viewModel.getMapSearchInfo()?.let { mapInfo ->
-                changeLocationLauncher.launch(
-                    MyLocationActivity.newIntent(
-                        this@MainActivity, mapInfo
-                    )
-                )
-            }
-          //  Toast.makeText(this@MainActivity, "ㄱㄷ", Toast.LENGTH_SHORT).show()
-        }
 
     }
-
-//        locationTitleTextView.setOnClickListener {
-//            viewModel.getMapSearchInfo()?.let { mapInfo ->
-//                changeLocationLauncher.launch(
-//                    MyLocationActivity.newIntent(
-//                        requireContext(), mapInfo
-//                    )
-//                )
-//            }
-//        }
 
     override fun onBackPressed() {
 
@@ -192,16 +162,6 @@ class MainActivity
             }
         }
     }
-//        locationTitleTextView.setOnClickListener {
-//            viewModel.getMapSearchInfo()?.let { mapInfo ->
-//                changeLocationLauncher.launch(
-//                    MyLocationActivity.newIntent(
-//                        requireContext(), mapInfo
-//                    )
-//                )
-//            }
-//        }
-
 
     private fun runDelayed(millis: Long, function: () -> Unit) {
         Handler(Looper.getMainLooper()).postDelayed(function, millis)
@@ -260,14 +220,29 @@ class MainActivity
 
     inner class MyLocationListener : LocationListener {
         override fun onLocationChanged(location: Location) {
+
             viewModel.getReverseGeoInformation(
                 LocationLatLngEntity(
                     latitude = location.latitude,
                     longitude = location.longitude
                 )
             )
-            curLoc = location
-            viewModel.setCurrentLocation(curLoc)
+
+            viewModel.setCurrentLocation(location)
+
+            val lat = location.latitude
+            val lon = location.longitude
+
+            var save_form = "{\"LATITUDE\":\"$lat\",\"LONGITUDE\":\"$lon\"}"
+
+            PreferenceManager.setTempUserString(application, "LOCATION", save_form)
+            PreferenceManager.setUserString(
+                application,
+                "LOCATION",
+                save_form,
+                "locationData"
+            )
+
             removeLocationListener()
         }
 

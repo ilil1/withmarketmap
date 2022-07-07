@@ -3,9 +3,6 @@ package com.example.YUmarket.screen.map.MapLocationSetting
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.location.Location
-import android.location.LocationListener
-import android.location.LocationManager
 import android.widget.Toast
 import com.example.YUmarket.data.entity.location.LocationLatLngEntity
 import com.example.YUmarket.data.entity.location.MapSearchInfoEntity
@@ -16,15 +13,9 @@ import com.skt.Tmap.TMapView
 import org.json.JSONObject
 import org.koin.android.viewmodel.ext.android.viewModel
 
+class MapLocationSettingActivity : BaseActivity<ActivityMapLocationSettingBinding>() {
 
-// 핀을 끌어서 옮길때마다 위치 정보 받아서 주소 보여줌
-class MapLocationSettingActivity : BaseActivity<ActivityMapLocationSettingBinding>(){
     var isCurAddressNull = true
-
-    private lateinit var locationManager: LocationManager
-    private lateinit var locationListener: LocationListener
-
-    private lateinit var cur: Location
 
     private lateinit var tMapView: TMapView
     private lateinit var tMapGPS: TMapGpsManager
@@ -33,6 +24,7 @@ class MapLocationSettingActivity : BaseActivity<ActivityMapLocationSettingBindin
     override fun getViewBinding() = ActivityMapLocationSettingBinding.inflate(layoutInflater)
 
     companion object {
+
         const val CAMERA_ZOOM_LEVEL = 15f
         const val MY_LOCATION_KEY = "MY_LOCATION_KEY"
 
@@ -46,23 +38,21 @@ class MapLocationSettingActivity : BaseActivity<ActivityMapLocationSettingBindin
         initMap()
 
         binding.btnSetCurLocation.setOnClickListener {
-            // 처음 들어와서 바로 설정버튼 누르면 에러
 
+            // 처음 들어와서 바로 설정버튼 누르면 에러
             // 이전 위치와 다른 경우에만 finish(). 같으면 아직 viewModel 갱신이 안된 상태이기 때문에 ㄱㄷ이라고 토스트
             // 먼저 지도 위치를 드래그 해서 이동시키는 즉시 isCurAddressNull = true
-
             // 로딩 이미지를 출력해서 지도 이동해서 갱신중일때 터치 막기
 
             if (!isCurAddressNull) {
                 val entity = viewModel.getMapSearchInfo()
-
                 val intent = Intent()
                 intent.putExtra("result", entity)
-
                 setResult(Activity.RESULT_OK, intent)
                 Toast.makeText(this@MapLocationSettingActivity, "설정완료!", Toast.LENGTH_SHORT).show()
                 finish()
-            } else {
+            }
+            else {
                 Toast.makeText(
                     this@MapLocationSettingActivity,
                     "위치를 드래그해서 갱신해주세요!",
@@ -73,7 +63,6 @@ class MapLocationSettingActivity : BaseActivity<ActivityMapLocationSettingBindin
 
         binding.fbtnBack.setOnClickListener {
             // 위치 정보 없음 상태에서 누르면 x
-
             //setResult(Activity.RESULT_CANCELED)
             finish()
         }
@@ -89,15 +78,10 @@ class MapLocationSettingActivity : BaseActivity<ActivityMapLocationSettingBindin
             var lat = jsonObject.getString("LATITUDE") as String
             var lon = jsonObject.getString("LONGITUDE") as String
 
-
-/*
-            if(cur == null){
+            if(lat == null || lon == null) {
                 Toast.makeText(this, "아직 현재위치를 가져오지 못했습니다.", Toast.LENGTH_LONG).show()
                 return@setOnClickListener
             }
-
- */
-
 
             tMapView.setLocationPoint(lon.toDouble(), lat.toDouble())
             tMapView.setCenterPoint(lon.toDouble(), lat.toDouble())
@@ -105,20 +89,17 @@ class MapLocationSettingActivity : BaseActivity<ActivityMapLocationSettingBindin
             isCurAddressNull = true
 
             viewModel.getReverseGeoInformation(
-                LocationLatLngEntity(
-                    lat.toDouble(),
-                    lon.toDouble()
-                )
+                LocationLatLngEntity(lat.toDouble(), lon.toDouble())
             )
         }
     }
 
     private fun initMap() = with(binding) {
+
         tMapView = TMapView(this@MapLocationSettingActivity).apply {
             setSKTMapApiKey("l7xx47edb2787b5040fc8e004c19e85c0053")
             setOnDisableScrollWithZoomLevelListener { _, tMapPoint ->
                 isCurAddressNull = true
-
                 viewModel.getReverseGeoInformation(
                     LocationLatLngEntity(
                         tMapPoint.latitude,
@@ -136,7 +117,7 @@ class MapLocationSettingActivity : BaseActivity<ActivityMapLocationSettingBindin
         tMapGPS.setProvider(tMapGPS.provider);
         //tMapGPS.setProvider(tMapGPS.GPS_PROVIDER);
 
-        tMapGPS.OpenGps();
+        tMapGPS.OpenGps()
 
         TMap.addView(tMapView)
         val entity = intent.getParcelableExtra<MapSearchInfoEntity>(MY_LOCATION_KEY)
@@ -152,26 +133,22 @@ class MapLocationSettingActivity : BaseActivity<ActivityMapLocationSettingBindin
     }
 
     override fun observeData() = with(viewModel) {
-        mapLocationSettingStateLiveData.observe(this@MapLocationSettingActivity) {
+        mapLocation.observe(this@MapLocationSettingActivity) {
             when (it) {
-                is MapLocationSettingState.Uninitialized -> {
-
+                is MapLocationSetting.Uninitialized -> {
                 }
 
-                is MapLocationSettingState.Loading -> {
-
+                is MapLocationSetting.Loading -> {
                 }
 
-                is MapLocationSettingState.Success -> {
+                is MapLocationSetting.Success -> {
                     binding.tvCurAddress.text = it.mapSearchInfoEntity.fullAddress
                     isCurAddressNull = false
                 }
-
-                is MapLocationSettingState.Error -> {
+                is MapLocationSetting.Error -> {
 
                 }
             }
         }
     }
-
 }

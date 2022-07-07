@@ -4,6 +4,7 @@ import androidx.annotation.StringRes
 import com.example.YUmarket.data.entity.location.MapSearchInfoEntity
 
 sealed class MainState {
+
     object Uninitialized : MainState()
     object Loading : MainState()
 

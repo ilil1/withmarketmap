@@ -1,4 +1,4 @@
-package aop.fastcampus.part6.chapter01.screen.mylocation
+package com.example.YUmarket.screen.myLocation
 
 import com.example.YUmarket.data.entity.location.MapSearchInfoEntity
 

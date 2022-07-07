@@ -39,6 +39,4 @@ class RecentAddrAdapter(val itemClick: (AddressHistoryEntity) -> Unit) :
             binding.root.setOnClickListener { itemClick(item) }
         }
     }
-
-
 }

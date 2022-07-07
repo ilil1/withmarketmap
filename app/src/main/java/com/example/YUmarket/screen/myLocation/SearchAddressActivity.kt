@@ -13,20 +13,19 @@ import com.example.YUmarket.databinding.ActivitySearchAddressBinding
 import com.example.YUmarket.screen.map.MapLocationSetting.MapLocationSettingActivity.Companion.MY_LOCATION_KEY
 
 class SearchAddressActivity : AppCompatActivity() {
+
     private lateinit var binding: ActivitySearchAddressBinding
-
     private val handler = Handler()
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySearchAddressBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         init()
     }
 
     private fun init() {
+
         binding.webViewAddress.settings.apply {
             javaScriptEnabled = true
             javaScriptCanOpenWindowsAutomatically = true
@@ -43,7 +42,8 @@ class SearchAddressActivity : AppCompatActivity() {
     }
 
     // TODO : search.php에서 arg1 매개변수 안넣게 하기
-    private inner class AndroidBridge { // 웹에서 JavaScript로 android 함수를 호출할 수 있도록 도와줌
+    private inner class AndroidBridge {
+        // 웹에서 JavaScript로 android 함수를 호출할 수 있도록 도와줌
         @JavascriptInterface
         open fun setAddress(arg1: String?, arg2: String?, arg3: String?) { // search.php에서 호출되는 함수
             handler.post {

@@ -9,7 +9,7 @@ sealed class MapState {
     object Loading : MapState()
 
     data class Success(
-        val markets: List<ShopInfoEntity>
+        val shopInfoList: List<ShopInfoEntity>?
     ) : MapState()
 
     data class Error(
