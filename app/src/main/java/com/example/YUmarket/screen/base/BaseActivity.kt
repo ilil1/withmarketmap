@@ -12,7 +12,6 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
         getViewBinding()
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -27,6 +26,4 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
     open fun initViews() = Unit
 
     abstract fun observeData()
-
-
 }

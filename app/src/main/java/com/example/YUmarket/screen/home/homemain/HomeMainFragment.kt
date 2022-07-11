@@ -185,10 +185,7 @@ class HomeMainFragment
             if (it is MainState.Success) {
                 viewModel.fetchData()
             }
-
         }
-
-
     }
 
     private val nearbyMarketAdapter by lazy {
@@ -197,13 +194,10 @@ class HomeMainFragment
             viewModel,
             resourcesProvider,
             object : TownMarketListener {
-                // RecyclerView의 Item을 클릭할때
                 override fun onClickItem(model: TownMarketModel) {
-                    // TODO 22.01.18 start detail market activity when clicked
                     startActivity(
                         HomeMarketDetailActivity.newIntent(requireContext(), model.toEntity())
                     )
-                    //Toast.makeText(context, model.toString(), Toast.LENGTH_SHORT).show()
                 }
             }
         )

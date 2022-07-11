@@ -7,7 +7,5 @@ class ChatActivity : BaseActivity<ActivityChatBinding>() {
     override fun getViewBinding(): ActivityChatBinding =
         ActivityChatBinding.inflate(layoutInflater)
 
-    override fun observeData() {
-
-    }
+    override fun observeData() {}
 }

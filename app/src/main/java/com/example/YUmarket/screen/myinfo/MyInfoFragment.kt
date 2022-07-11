@@ -49,16 +49,13 @@ import java.util.prefs.Preferences
  */
 class MyInfoFragment : BaseFragment<FragmentMyInfoBinding>() {
 
-
     private lateinit var bitmap: Bitmap
     private lateinit var getResultImage: ActivityResultLauncher<Intent>
     private lateinit var sharedManager : PreferenceManager
 
-
     private fun popUp() {
         requireContext().let { it1 -> Method().popUp(it1) }
     }
-
 
     private val check = true;
 

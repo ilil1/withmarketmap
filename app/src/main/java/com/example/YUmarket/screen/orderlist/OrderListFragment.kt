@@ -8,8 +8,7 @@ class OrderListFragment : BaseFragment<FragmentOrderListBinding>() {
     override fun getViewBinding() =
         FragmentOrderListBinding.inflate(layoutInflater)
 
-    override fun observeData() {
-    }
+    override fun observeData() {}
 
     companion object {
         const val TAG = "OrderListFragment"
@@ -18,6 +17,4 @@ class OrderListFragment : BaseFragment<FragmentOrderListBinding>() {
             return OrderListFragment()
         }
     }
-
-
 }

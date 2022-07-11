@@ -15,6 +15,5 @@ import com.example.YUmarket.screen.myinfo.customerservice.list.CSCategory
 
 interface CSRepository {
 
-
      fun findCsByCategory(csCategory: CSCategory) : List<CSModel>
 }

@@ -16,7 +16,6 @@ class ChatDetailFragment : BaseFragment<FragmentChatDetailBinding>() {
     override fun initViews() {
         super.initViews()
 
-
         val chatData = arguments?.getParcelable<ChatData>("data")
         binding.storeName.text = chatData?.storeName.toString()
 
@@ -26,6 +25,5 @@ class ChatDetailFragment : BaseFragment<FragmentChatDetailBinding>() {
                     .navigate(R.id.action_chatDetailFragment_to_chatFragment)
             }
         }
-
     }
 }

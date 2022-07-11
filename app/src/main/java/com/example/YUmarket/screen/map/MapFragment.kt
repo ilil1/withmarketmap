@@ -97,15 +97,6 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
     }
 
     private lateinit var naverMap: NaverMap
-    private lateinit var layout: View
-
-    private var filterCategoryOptions = mutableListOf<CheckBox>()
-    private var filterCategoryChecked = mutableListOf<Boolean>()
-
-    /**
-     * 지도에서 사용할 목적지 마커
-     */
-
     private lateinit var geocoder: Geocoder
     private var infoWindow: InfoWindow? = null
 
@@ -118,6 +109,9 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
         }
     }
 
+    private var filterCategoryOptions = mutableListOf<CheckBox>()
+    private var filterCategoryChecked = mutableListOf<Boolean>()
+    private lateinit var chkAll: CheckBox
     private lateinit var builder: AlertDialog.Builder
     private lateinit var dialog: AlertDialog
 
@@ -131,11 +125,6 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
     }
 
     private var isListenerAdded : Boolean = false
-
-    /*
-        서버에서 식당 정보를 받아와서 배열에 담고, repeat 안에서 배열을 돌면서 마커에 이름과 좌표를 넣는다.
-    */
-
 
     override fun getViewBinding(): FragmentMapBinding =
         FragmentMapBinding.inflate(layoutInflater)
@@ -208,52 +197,43 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
         }
     }
 
-    private lateinit var chkAll: CheckBox
-
     private fun initDialog() {
 
         builder = AlertDialog.Builder(requireContext())
         builder.setCancelable(false)
 
-        val displayRectangle = Rect()
-        val window = requireActivity().window
-        window.decorView.getWindowVisibleDisplayFrame(displayRectangle)
+        chkAll = dialogBinding.all
 
-        val inflater =
-            requireActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        layout = inflater.inflate(R.layout.dialog_filter, null)
-        layout.minimumWidth = ((displayRectangle.width() * 0.9f).toInt())
-        layout.minimumHeight = ((displayRectangle.height() * 0.9f).toInt())
+        with(dialogBinding) {
+            filterCategoryOptions.addAll(
+                arrayOf(
+                    foodBeverage, service, fashionAccessories,
+                    supermarket, fashionClothes, etc
+                )
+            )
+        }
 
-        chkAll = layout.findViewById(R.id.all)
-        filterCategoryOptions.add(layout.findViewById(R.id.food_beverage))
-        filterCategoryOptions.add(layout.findViewById(R.id.service))
-        filterCategoryOptions.add(layout.findViewById(R.id.fashion_accessories))
-        filterCategoryOptions.add(layout.findViewById(R.id.supermarket))
-        filterCategoryOptions.add(layout.findViewById(R.id.fashion_clothes))
-        filterCategoryOptions.add(layout.findViewById(R.id.etc))
+        chkAll.setOnClickListener {
+            filterCategoryOptions.forEach { checkBox ->
+                checkBox.isChecked = chkAll.isChecked
+            }
+        }
 
-        for (checkBox in filterCategoryOptions) {
-            filterCategoryChecked.add(true)
-
-            checkBox.setOnClickListener { // checkOnListener안한 이유는 직접 터치하지 않고 체크박스의 체크를 설정할때 불필요하게 호출됨
-                for (_checkBox in filterCategoryOptions)
+        filterCategoryOptions.forEach { checkBox ->
+            filterCategoryChecked.add(true) // btnclose 할 시 ture 반환을 위해서
+            checkBox.setOnClickListener {
+                for (_checkBox in filterCategoryOptions) {
                     if (!_checkBox.isChecked) {
-                        chkAll.isChecked = false // 이떄 all 리스너 동작 -> all은 클릭 리스너로 바꿈
+                        chkAll.isChecked = false
                         return@setOnClickListener
                     }
-
+                }
                 chkAll.isChecked = true
             }
         }
 
-        chkAll.setOnClickListener {
-            for (item in filterCategoryOptions)
-                item.isChecked = chkAll.isChecked // 아이템마다 리스너 전부 동작
-        }
+        dialogBinding.btnCloseFilter.setOnClickListener {
 
-        layout.findViewById<ImageButton>(R.id.btn_close_filter).setOnClickListener {
-            // 필터 열때 저장했던 체크정보 다시 UI에 적용
             var check = true
             for (i in 0 until filterCategoryOptions.size) {
                 filterCategoryOptions[i].isChecked = filterCategoryChecked[i]
@@ -263,20 +243,36 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
             chkAll.isChecked = check
 
             dialog.dismiss()
-            (layout.parent as ViewGroup).removeView(layout)
+            if (dialogBinding.root.parent != null) {
+                (dialogBinding.root.parent as ViewGroup).removeView(dialogBinding.root)
+            }
         }
 
-        layout.findViewById<Button>(R.id.btn_filter_apply).setOnClickListener {
+        dialogBinding.btnFilterReset.setOnClickListener {
+
+            filterCategoryOptions.forEach { it.isChecked = true }
+
+            var check = true
+            for (item in filterCategoryOptions)
+                if (!item.isChecked) {
+                    check = false
+                }
+
+            if (check) chkAll.isChecked = true
+        }
+
+        dialogBinding.btnFilterApply.setOnClickListener {
 
             var noChk = true
-            for (item in filterCategoryOptions)
+            for (item in filterCategoryOptions) {
                 if (item.isChecked) {
                     noChk = false
                     break
                 }
+            }
 
             if (noChk) {
-                Toast.makeText(context, "적어도 하나 이상 카테고리를 선택해야 합니다.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "적어도 하나 이상 카테고리를 선택해야 합니다.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
@@ -286,24 +282,12 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
             updateMarker()
 
             dialog.dismiss()
-            (layout.parent as ViewGroup).removeView(layout)
-        }
-
-        layout.findViewById<Button>(R.id.btn_filter_reset).setOnClickListener {
-            for (i in 0 until filterCategoryOptions.size) {
-                filterCategoryOptions[i].isChecked = true
+            if (dialogBinding.root.parent != null) {
+                (dialogBinding.root.parent as ViewGroup).removeView(dialogBinding.root)
             }
-            // checkonlistener를 안해줘서 각각의 체크박스들이 반응을 안해서 여기서 다시 해줌
-            var check = true
-
-            for (item in filterCategoryOptions)
-                if (!item.isChecked) {
-                    check = false // 이떄 all 리스너 동작 -> all은 클릭 리스너로 바꿈
-                }
-            if (check) chkAll.isChecked = true
         }
 
-        builder.setView(layout)
+        builder.setView(dialogBinding.root)
         builder.create()
     }
 
@@ -396,32 +380,6 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
             (DISTANCE / naverMap.projection.metersPerPixel).toInt()
     }
 
-    /**
-     * 네이버 지도상 마커를 모두 없애는 method
-     */
-    private fun deleteMarkers() {
-        for (marker in mapViewModel.getMarkers()!!) {
-            marker.map = null
-        }
-    }
-
-    /**
-     * 네이버 지도상에 마커를 표시
-     */
-    private fun showMarkersOnMap() {
-        for (marker in mapViewModel.getMarkers()!!) {
-            marker.map = mapViewModel.getMap()
-            mapViewModel.setMarkerIconAndColor(marker, mapViewModel.getCategoryNum(mapViewModel.getShopEntityList()?.get(marker.zIndex)!!.category))
-        }
-    }
-
-    private fun searchAround() {
-        deleteMarkers()
-        binding.viewPager2.visibility = View.GONE
-        binding.fbtnCloseViewPager.visibility = View.GONE
-        showMarkersOnMap()
-    }
-
     private fun setMarkerListener(markets: List<ShopInfoEntity>) {
         for (marker in mapViewModel.getMarkers()!!) {
             marker.setOnClickListener {
@@ -449,7 +407,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
 
     private fun updateMarker() {
 
-        deleteMarkers()
+        mapViewModel.deleteMarkers()
 
         // 가게 돌면서 가게 id에 해당하는게 true라면
         var markets : List<ShopInfoEntity> = mutableListOf()
@@ -502,7 +460,11 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
 
             mapViewModel.setMarkers(temp)
 
-            searchAround()
+            binding.viewPager2.visibility = View.GONE
+            binding.fbtnCloseViewPager.visibility = View.GONE
+            mapViewModel.deleteMarkers()
+            mapViewModel.showMarkersOnMap()
+
             setMarkerListener(markets)
 
             if(temp.size > 0)

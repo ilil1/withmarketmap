@@ -29,6 +29,7 @@ class MapLocationSettingViewModel(
     fun getReverseGeoInformation(
         locationLatLngEntity: LocationLatLngEntity
     ) = viewModelScope.launch {
+
         val currentLocation = locationLatLngEntity
         val addressInfo = mapApiRepository.getReverseGeoInformation(locationLatLngEntity)
 

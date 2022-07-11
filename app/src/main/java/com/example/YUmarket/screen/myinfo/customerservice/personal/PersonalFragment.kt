@@ -10,15 +10,12 @@ class PersonalFragment : BaseFragment<FragmentPersonalBinding>() {
     override fun getViewBinding(): FragmentPersonalBinding =
         FragmentPersonalBinding.inflate(layoutInflater)
 
-    override fun observeData() = with(binding) {
-
-    }
+    override fun observeData() {}
 
     override fun initViews() {
 
         binding.configurationLeft.setOnClickListener {
             backMove()
-
         }
     }
 
@@ -28,7 +25,6 @@ class PersonalFragment : BaseFragment<FragmentPersonalBinding>() {
                 .navigate(R.id.action_personalFragment_to_myInfoFragment)
         }
         backStack()
-
     }
 
     private fun backStack() {

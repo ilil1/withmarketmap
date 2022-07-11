@@ -18,5 +18,4 @@ class StoreViewModel(
     override fun fetchData(): Job = viewModelScope.launch {
         _storeListData.value = storeRepository.findStore()
     }
-
 }

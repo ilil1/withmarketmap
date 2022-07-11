@@ -11,7 +11,7 @@ data class TownMarketModel(
     val isMarketOpen: Boolean,
     val locationLatLngEntity: LocationLatLngEntity,
     val marketImageUrl: String,
-    val distance: Float, // 22.01.18 거리 추가 by 정남진
+    val distance: Float,
     override val type: CellType = CellType.HOME_TOWN_MARKET_CELL
 ) : Model(id, type) {
 

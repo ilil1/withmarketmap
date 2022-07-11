@@ -56,11 +56,26 @@ class MapViewModel(
     fun getMap(): NaverMap? { return naverMap }
     fun setMap(m: NaverMap) { naverMap = m }
 
-    private fun deleteMarkers() {
+    /**
+     * 네이버 지도상 마커를 모두 없애는 method
+     */
+    fun deleteMarkers() {
         if (markers.isNullOrEmpty())
             return
-        for (marker in markers!!) {
+        for (marker in markers) {
             marker.map = null
+        }
+    }
+
+    /**
+     * 네이버 지도상에 마커를 표시
+     */
+    fun showMarkersOnMap() {
+        if (markers.isNullOrEmpty())
+            return
+        for (marker in markers) {
+            marker.map = getMap()
+            setMarkerIconAndColor(marker, getCategoryNum(getShopEntityList()?.get(marker.zIndex)!!.category))
         }
     }
 

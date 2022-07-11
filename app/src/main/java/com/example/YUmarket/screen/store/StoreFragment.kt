@@ -26,18 +26,12 @@ class StoreFragment : BaseFragment<FragmentStoreBinding>() {
         storeListData.observe(viewLifecycleOwner) {
             adapter.submitList(it)
         }
-
-
     }
-
 
     override fun initViews() = with(binding) {
         super.initViews()
 
-
         //    setSpinner()
-
-
 
         storeRec.adapter = adapter
         storeRec.layoutManager = GridLayoutManager(
@@ -46,8 +40,6 @@ class StoreFragment : BaseFragment<FragmentStoreBinding>() {
             GridLayoutManager.VERTICAL,
             false
         )
-
-
     }
 
     override fun initState() = with(viewModel) {

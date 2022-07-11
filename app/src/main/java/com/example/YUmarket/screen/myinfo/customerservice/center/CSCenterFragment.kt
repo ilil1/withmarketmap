@@ -46,13 +46,11 @@ class CSCenterFragment : BaseFragment<FragmentCsCenterBinding>() {
     override fun initViews() = with(binding) {
         super.initViews()
 
-
         binding.questionCenter.setOnClickListener {
             view?.let { it1 ->
                 Navigation.findNavController(it1)
                     .navigate(CSCenterFragmentDirections.actionCSCenterFragmentToCSFragment())
             }
-
         }
 
         binding.centerNumber.setOnClickListener {
@@ -72,7 +70,6 @@ class CSCenterFragment : BaseFragment<FragmentCsCenterBinding>() {
 
         binding.back.setOnClickListener {
             backMove()
-
         }
     }
 
@@ -166,7 +163,6 @@ class CSCenterFragment : BaseFragment<FragmentCsCenterBinding>() {
             )
             Toast.makeText(context, "권한에 동의되었습니다. 다시 버튼을 눌러주새요", Toast.LENGTH_SHORT).show()
         }
-
     }
 
     private fun permissionCheck_food() {
@@ -187,7 +183,6 @@ class CSCenterFragment : BaseFragment<FragmentCsCenterBinding>() {
             )
             Toast.makeText(context, "권한에 동의되었습니다. 다시 버튼을 눌러주새요", Toast.LENGTH_SHORT).show()
         }
-
     }
 
 
@@ -215,8 +210,6 @@ class CSCenterFragment : BaseFragment<FragmentCsCenterBinding>() {
             Navigation.findNavController(it1).popBackStack()
         }
     }
-
-
 }
 
 

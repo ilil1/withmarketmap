@@ -22,19 +22,12 @@ class SliderAdater internal constructor(
         this.viewPager2 = viewPager2
     }
 
-
     class SliderViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView){
         private val imageView : ImageView = itemView.findViewById(R.id.pagerimage)
-
-
-
 
         fun image(sliderItem : SliderItem){
             imageView.setImageResource(sliderItem.image)
         }
-
-
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SliderViewHolder {
@@ -62,6 +55,4 @@ class SliderAdater internal constructor(
         sliderItems.addAll(sliderItems)
         notifyDataSetChanged()
     }
-
-
 }

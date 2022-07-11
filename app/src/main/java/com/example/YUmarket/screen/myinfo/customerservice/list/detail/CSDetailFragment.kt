@@ -13,9 +13,7 @@ class CSDetailFragment : BaseFragment<FragmentDetailBinding>() {
     override fun getViewBinding(): FragmentDetailBinding =
         FragmentDetailBinding.inflate(layoutInflater)
 
-    override fun observeData() {
-
-    }
+    override fun observeData() {}
 
     override fun initViews() = with(binding) {
         super.initViews()
@@ -28,7 +26,6 @@ class CSDetailFragment : BaseFragment<FragmentDetailBinding>() {
         uturn.setOnClickListener {
             changeFragment()
         }
-
     }
 
     private fun changeFragment() {
@@ -42,10 +39,7 @@ class CSDetailFragment : BaseFragment<FragmentDetailBinding>() {
         view?.let { it1 ->
             Navigation.findNavController(it1).popBackStack()
         }
-
     }
-
-
 }
 
 

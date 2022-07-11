@@ -112,14 +112,15 @@ class MapLocationSettingActivity : BaseActivity<ActivityMapLocationSettingBindin
         tMapGPS = TMapGpsManager(applicationContext);
 
         // Initial Setting
-        tMapGPS.setMinTime(1000);
-        tMapGPS.setMinDistance(10F);
-        tMapGPS.setProvider(tMapGPS.provider);
-        //tMapGPS.setProvider(tMapGPS.GPS_PROVIDER);
-
-        tMapGPS.OpenGps()
+//        tMapGPS.setMinTime(1000)
+//        tMapGPS.setMinDistance(10F)
+//        tMapGPS.setProvider(tMapGPS.provider)
+//        //tMapGPS.setProvider(tMapGPS.GPS_PROVIDER)
+//
+//        tMapGPS.OpenGps()
 
         TMap.addView(tMapView)
+
         val entity = intent.getParcelableExtra<MapSearchInfoEntity>(MY_LOCATION_KEY)
 
         // 화면을 이동하면서 화면 중앙에 해당하는 실제 좌표 위치를 tMapPoint에 계속 저장함
@@ -146,7 +147,6 @@ class MapLocationSettingActivity : BaseActivity<ActivityMapLocationSettingBindin
                     isCurAddressNull = false
                 }
                 is MapLocationSetting.Error -> {
-
                 }
             }
         }

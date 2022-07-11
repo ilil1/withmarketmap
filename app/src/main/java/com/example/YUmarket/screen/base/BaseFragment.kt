@@ -35,8 +35,4 @@ abstract class BaseFragment<VB: ViewBinding>: Fragment() {
 
     abstract fun observeData()
 
-
-
-
-
 }
